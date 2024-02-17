@@ -2,11 +2,26 @@ Create table Students (ST_ID Serial PRIMARY KEY, ST_NAME Varchar(100), ST_LAST V
 select * from Students
 
 CREATE TABLE interests (
-    id SERIAL PRIMARY KEY,
     student_id INTEGER REFERENCES Students(ST_ID),
     interest VARCHAR(255)
 );
 
+Insert into  Students (ST_ID, ST_NAME, ST_LAST) Values (1,'Ayyub','Mammadli')
+Insert into  Students (ST_ID, ST_NAME, ST_LAST) Values (2,'Elmar','Mammadlaliyev')
+Insert into  Students (ST_ID, ST_NAME, ST_LAST) Values (3,'Farhad','Khidirov')
+Insert into  Students (ST_ID, ST_NAME, ST_LAST) Values (4,'Natiq','Aliyev')
+Insert into  Students (ST_ID, ST_NAME, ST_LAST) Values (5,'Ruslan','Salmanov')
 
 
+Insert into  interests (student_id, interest) Values (1,'Football')
+Insert into  interests (student_id, interest) Values (1,'Basketball')
+Insert into  interests (student_id, interest) Values (2,'Tennis')
+Insert into  interests (student_id, interest) Values (3,'Chess')
+Insert into  interests (student_id, interest) Values (2,'Tennis')
+Insert into  interests (student_id, interest) Values (4,'Hockey')
+Insert into  interests (student_id, interest) Values (5,'Music')
+Insert into  interests (student_id, interest) Values (5,'Math')
+Insert into  interests (student_id, interest) Values (2,'History')
+
+select * from interests
 
