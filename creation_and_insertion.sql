@@ -1,6 +1,5 @@
 CREATE OR REPLACE FUNCTION create_and_insert() RETURNS VOID AS $$
 BEGIN
-    -- Create tables
     CREATE TABLE IF NOT EXISTS Students (
         ST_ID Serial PRIMARY KEY,
         ST_NAME Varchar(100),
@@ -12,7 +11,6 @@ BEGIN
         interest VARCHAR(255)
     );
 
-    -- Multiple INSERT statements here
     INSERT INTO Students (ST_ID, ST_NAME, ST_LAST) VALUES 
         (1,'Ayyub','Mammadli'),
         (2,'Elmar','Mammadaliyev'),
