@@ -218,8 +218,7 @@ Interests Table:
 
 # 2. Explanation of migration function
 
-## Description
-This readme file provides instructions for migrating data in a PostgreSQL database using SQL commands.
+
 
 ## Steps for Migration
 
@@ -270,6 +269,8 @@ This readme file provides instructions for migrating data in a PostgreSQL databa
 
 
 # 2. Explanation of rollback function
+
+## Steps for Rollback 
 
     1.Rename Columns in Students Table:
         The function begins by renaming the column STUDENT_ID to ST_ID in the Students table.
