@@ -106,7 +106,7 @@ After opening empty Query tool you will need to open the migration.sql file that
 
 Step 3 
 
-Firstly, you need to run the migration function on that query. For running that function you need to select the portion of that script which is between 1 and 40th line. After selecting you need to run it by clicking "Execute Script" button, or just clicking F5 button on your keyboard. 
+Firstly, you need to run first and second line in order to create interests_backup table. Then, you should run the migration function on that query. For running that function you need to select the portion of that script which is between 1 and 40th line. After selecting you need to run it by clicking "Execute Script" button, or just clicking F5 button on your keyboard. 
 
 The output will be: 
 
