@@ -47,23 +47,37 @@ Lastly, you will need to execute 40th and 41st line seperately as you were doing
 Students table: 
 
 "st_id"	  "st_name"	  "st_last"
+
 1	      "Ayyub"	   "Mammadli"
+
 2	      "Elmar"	 "Mammadaliyev"
+
 3	     "Farhad"	 "Khidirov"
+
 4	     "Natiq"	 "Aliyev"
+
 5	     "Ruslan"	 "Salmanov"
 
 Interests Table: 
 
 "student_id"	"interest"
+
 1	            "Football"
+
 1	            "Basketball"
+
 2	             "Tennis"
+
 3	             "Chess"
+
 2	             "Tennis"
+
 4	             "Hockey"
+
 5	             "Music"
+
 5	             "Math"
+
 2	             "History"
 
 
