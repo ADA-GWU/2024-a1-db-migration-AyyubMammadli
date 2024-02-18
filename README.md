@@ -222,7 +222,7 @@ Interests Table:
 This readme file provides instructions for migrating data in a PostgreSQL database using SQL commands.
 
 ## Steps for Migration
-Follow these steps to migrate data in your PostgreSQL database:
+
 
 1. **Backup Interests Table**: 
    - Run the following SQL command to create a backup of the interests table:
@@ -231,128 +231,70 @@ Follow these steps to migrate data in your PostgreSQL database:
      ```
 
 2. **Run Migration Function**:
-   - Execute the migration function by running the following SQL command:
-     ```sql
-     CREATE OR REPLACE FUNCTION migration() RETURNS VOID AS $$
-     BEGIN
-         -- Rename column ST_ID to STUDENT_ID
-         ALTER TABLE STUDENTS RENAME COLUMN ST_ID TO STUDENT_ID;
-     
-         -- Change data types of columns ST_NAME and ST_LAST to VARCHAR(30)
-         ALTER TABLE STUDENTS 
-             ALTER COLUMN ST_NAME TYPE VARCHAR(30),
-             ALTER COLUMN ST_LAST TYPE VARCHAR(30);
-     
-         -- Create temporary table to aggregate interests
-         CREATE TEMP TABLE temp_interests AS
-         SELECT
-             student_id,
-             ARRAY_AGG(DISTINCT interest ORDER BY interest) AS aggregated_interests
-         FROM
-             interests
-         GROUP BY
-             student_id;
-     
-         -- Drop existing interests table
-         DROP TABLE IF EXISTS interests;
-     
-         -- Create new interests table with updated structure
-         CREATE TABLE interests (
-             student_id INTEGER REFERENCES Students(STUDENT_ID),
-             interests VARCHAR[] 
-         );
-     
-         -- Insert aggregated interests data into the new interests table
-         INSERT INTO interests (student_id, interests)
-         SELECT student_id, aggregated_interests FROM temp_interests;
-     
-         -- Drop temporary table
-         DROP TABLE IF EXISTS temp_interests;
-     END;
-     $$ LANGUAGE plpgsql;
-     ```
-   - Execute the migration function using:
-     ```sql
-     SELECT migration();
-     ```
 
-3. **Verify Data Migration**:
-   - Check if the data migration was successful by executing the following SQL queries:
-     ```sql
-     SELECT * FROM students;
-     SELECT * FROM interests;
-     ```
+   1.Create Backup Table:
+        The interests_backup table is created by copying all the data from the interests table using the CREATE TABLE ... AS SELECT * FROM interests statement.
 
-## Note
-Ensure that you have appropriate permissions and backup your data before performing any migration operations.
+    2.Define Migration Function:
+        The migration function is defined to carry out the migration process.
+
+    3.Rename Columns in Students Table:
+        The function begins by renaming the column ST_ID to STUDENT_ID in the STUDENTS table.
+
+    4.Modify Column Data Types in Students Table:
+        Next, it alters the data types of columns ST_NAME and ST_LAST in the STUDENTS table to VARCHAR(30).
+
+    5.Create Temporary Table for Aggregated Interests:
+        A temporary table named temp_interests is created to store aggregated interests data. This table stores each student's interests as an array.
+
+    6.Drop Existing Interests Table:
+        The existing interests table is dropped if it exists, using the DROP TABLE IF EXISTS interests statement.
+
+    7.Create New Interests Table:
+        A new interests table is created with columns student_id (referencing STUDENTS(STUDENT_ID)) and interests (an array of VARCHAR).
+
+    8.Insert Aggregated Interests Data:
+        Data from the temporary table temp_interests is inserted into the new interests table.
+
+    9.Drop Temporary Table:
+        The temporary table temp_interests is dropped to clean up.
+
+    10.Execute the Migration Function:
+        The migration function is executed using SELECT migration();.
+
+    11.Verify Results:
+        Finally, two SELECT statements are used to verify the changes:
+            SELECT * FROM students retrieves all records from the students table.
+            SELECT * FROM interests retrieves all records from the interests table.
 
 
 
 # 2. Explanation of rollback function
 
-# Description
-This readme file provides instructions for rolling back data changes in a PostgreSQL database using a rollback function.
+    1.Rename Columns in Students Table:
+        The function begins by renaming the column STUDENT_ID to ST_ID in the Students table.
 
-## Steps for Rollback
-Follow these steps to roll back data changes in your PostgreSQL database:
+    2.Modify Column Data Types in Students Table:
+        Next, it alters the data types of columns ST_NAME and ST_LAST in the Students table to VARCHAR(100).
 
-1. **Create Rollback Function**: 
-   - Run the following SQL command to create a rollback function:
-     ```sql
-     CREATE OR REPLACE FUNCTION rollback_function() RETURNS VOID AS
-     $$
-     BEGIN
-         -- Rename column STUDENT_ID to ST_ID in Students table
-         ALTER TABLE Students RENAME COLUMN STUDENT_ID TO ST_ID;
-     
-         -- Change data types of columns ST_NAME and ST_LAST to VARCHAR(100) in Students table
-         ALTER TABLE Students
-             ALTER COLUMN ST_NAME TYPE VARCHAR(100),
-             ALTER COLUMN ST_LAST TYPE VARCHAR(100);
-     
-         -- Rename column interests to interest in interests table
-         ALTER TABLE interests RENAME COLUMN interests TO interest;
-     
-         -- Change data type of interest column to VARCHAR[] in interests table
-         ALTER TABLE interests ALTER COLUMN interest SET DATA TYPE VARCHAR[];
-     
-         -- Delete all records from interests table
-         DELETE FROM interests;
-     
-         -- Insert data from interests_backup table into interests table
-         INSERT INTO interests (student_id, interest)
-         SELECT student_id, ARRAY[interest] FROM interests_backup;
-         
-         -- Drop interests_backup table
-         DROP TABLE IF EXISTS interests_backup;
-     END;
-     $$ LANGUAGE plpgsql;
-     ```
-     
-2. **Execute Rollback Function**:
-   - Execute the rollback function using the following SQL command:
-     ```sql
-     SELECT rollback_function();
-     ```
+    3.Rename Column and Modify Data Type in Interests Table:
+        The function renames the column interests to interest in the interests table.
+        It also changes the data type of the interest column to VARCHAR[] (an array of VARCHAR).
 
-3. **Verify Rollback**:
-   - Check if the rollback was successful by executing the following SQL queries:
-     ```sql
-     SELECT * FROM students;
-     SELECT * FROM interests;
-     ```
+    4.Delete All Records from Interests Table:
+        All records from the interests table are deleted using the DELETE FROM statement.
 
+    5.Restore Data from Backup:
+        Data from a backup table named interests_backup is inserted into the interests table. Each interest value is inserted as an element of an array.
+        The interests_backup table is dropped afterward to clean up.
 
+    6.Execute the Rollback Function:
+        After defining the function, it is executed by selecting it with SELECT rollback_function();.
 
-
-
-
-
-
-
-
-
-
+    7.Verify Results:
+        Finally, two SELECT statements are used to verify the changes:
+            SELECT * FROM students retrieves all records from the students table.
+            SELECT * FROM interests retrieves all records from the interests table.
 
 
 
